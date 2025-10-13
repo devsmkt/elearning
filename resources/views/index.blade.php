@@ -230,7 +230,7 @@
             href="/courses"
             class="border border-white px-6 py-3 text-sm font-medium hover:bg-gray-800"
           >
-            View Courses
+            View Course
           </a>
         </div>
       </section>
