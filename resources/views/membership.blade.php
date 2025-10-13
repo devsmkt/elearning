@@ -331,24 +331,14 @@
       <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
         <div class="flex flex-col mr-8">
           <a href="/">
-            <svg
-              width="75"
-              height="40"
-              viewBox="0 0 200 60"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="200" height="60" fill="black" />
-              <text
-                x="100"
-                y="35"
-                fill="white"
-                text-anchor="middle"
-                font-family="sans-serif"
-                font-size="16"
-              >
-                Academy Logo
-              </text>
-            </svg>
+           <a href="/" class="flex items-center">
+            <img
+                src="{{ asset('images/academy-logo.svg') }}"
+                alt="Artisan Barber Academy Logo"
+                class="h-10 w-auto"
+            />
+            </a>
+        </a>
           </a>
           <p class="text-sm text-gray-600 mt-4">
             Elevating the craft of barbering with education, mentorship, and

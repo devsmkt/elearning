@@ -32,24 +32,13 @@
       <div>
         <a href="/">
           <!-- Placeholder logo -->
-          <svg
-            width="100"
-            height="40"
-            viewBox="0 0 200 60"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="200" height="60" fill="black" />
-            <text
-              x="100"
-              y="35"
-              fill="white"
-              text-anchor="middle"
-              font-family="sans-serif"
-              font-size="18"
-            >
-              Academy Logo
-            </text>
-          </svg>
+         <a href="/" class="flex items-center">
+            <img
+                src="{{ asset('images/academy-logo.svg') }}"
+                alt="Artisan Barber Academy Logo"
+                class="h-10 w-auto"
+            />
+            </a>
         </a>
       </div>
 

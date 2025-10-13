@@ -8,6 +8,18 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::get('/courses', function () {
+    return view('courses');
+});
+
+Route::get('/memebership', function () {
+    return view('membership');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
