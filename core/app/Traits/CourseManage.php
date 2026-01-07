@@ -20,7 +20,15 @@ trait CourseManage
     public function saveContent(Request $request, $slug)
     {
 
+        $course = Course::where('instructor_id', auth()->id())->where('slug', $slug)->first();
+        if (!$course) {
+            $notify[] = 'Course not found';
+            return responseError('course_not_found', $notify);
+        }
+
         $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:courses,slug,' . $course->id,
             'subtitle' => 'required|string|max:255',
             'category_id' => 'required|integer',
             'sub_category_id' => 'required|integer',
@@ -32,12 +40,6 @@ trait CourseManage
         ]);
 
         if ($validator->fails()) return responseError('validation_error', $validator->errors());
-
-        $course = Course::where('instructor_id', auth()->id())->where('slug', $slug)->first();
-        if (!$course) {
-            $notify[] = 'Course not found';
-            return responseError('course_not_found', $notify);
-        }
 
         $category = Category::active()->find($request->category_id);
 
@@ -52,6 +54,8 @@ trait CourseManage
             return responseError('sub_category_not_found', $notify);
         }
 
+        $course->title = $request->title;
+        $course->slug = $request->slug;
         $course->subtitle = $request->subtitle;
         $course->category_id = $category->id;
         $course->sub_category_id = $subCategory->id;
