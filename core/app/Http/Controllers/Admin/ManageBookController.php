@@ -33,6 +33,7 @@ class ManageBookController extends Controller
             'book_category_id' => 'required|exists:book_categories,id',
             'title' => 'required|string|max:255',
             'image' => ['required', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'file' => ['nullable', new FileTypeValidate(['pdf'])],
             'description' => 'required',
         ]);
 
@@ -47,6 +48,15 @@ class ManageBookController extends Controller
                 $book->image = fileUploader($request->image, getFilePath('book'), getFileSize('book'));
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Image could not be uploaded'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        if ($request->hasFile('file')) {
+            try {
+                $book->file = fileUploader($request->file, getFilePath('book_pdf'));
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'PDF could not be uploaded'];
                 return back()->withNotify($notify);
             }
         }
@@ -71,6 +81,7 @@ class ManageBookController extends Controller
             'book_category_id' => 'required|exists:book_categories,id',
             'title' => 'required|string|max:255',
             'image' => ['nullable', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'file' => ['nullable', new FileTypeValidate(['pdf'])],
             'description' => 'required',
         ]);
 
@@ -86,6 +97,16 @@ class ManageBookController extends Controller
                 $book->image = fileUploader($request->image, getFilePath('book'), getFileSize('book'), $old);
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Image could not be uploaded'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        if ($request->hasFile('file')) {
+            try {
+                $old = $book->file;
+                $book->file = fileUploader($request->file, getFilePath('book_pdf'), null, $old);
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'PDF could not be uploaded'];
                 return back()->withNotify($notify);
             }
         }

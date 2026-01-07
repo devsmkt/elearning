@@ -13,6 +13,11 @@
                                     <label>@lang('Image')</label>
                                     <x-image-uploader :imagePath="getImage(getFilePath('book'), getFileSize('book'))" :size="getFileSize('book')" class="w-100" id="uploadImage" :required="true" />
                                 </div>
+                                <div class="form-group">
+                                    <label>@lang('Upload PDF')</label>
+                                    <input type="file" name="file" class="form-control" accept=".pdf">
+                                    <small class="text-muted">@lang('Supported file: .pdf')</small>
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">

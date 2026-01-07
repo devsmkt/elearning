@@ -16,6 +16,16 @@
                                     <label>@lang('Image')</label>
                                     <x-image-uploader :imagePath="getImage(getFilePath('book').'/'.$book->image, getFileSize('book'))" :size="getFileSize('book')" class="w-100" id="uploadImage" :required="false" />
                                 </div>
+                                <div class="form-group">
+                                    <label>@lang('Upload PDF')</label>
+                                    <input type="file" name="file" class="form-control" accept=".pdf">
+                                    <small class="text-muted">@lang('Supported file: .pdf')</small>
+                                    @if($book->file)
+                                        <div class="mt-2">
+                                            <a href="{{ $book->file_url }}" target="_blank" class="text--primary"><i class="las la-file-pdf"></i> @lang('View Current PDF')</a>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">

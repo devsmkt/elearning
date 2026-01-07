@@ -100,6 +100,10 @@ class FileInfo
             'thumb'     => '300x400',
         ];
 
+        $data['book_pdf'] = [
+            'path'      => 'assets/files/book_pdf',
+        ];
+
         $data['lesson_pdf'] = [
             'path'      => 'assets/files/lesson_pdf',
         ];
