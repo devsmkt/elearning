@@ -432,4 +432,43 @@ Route::middleware('admin')->group(function () {
             Route::post('manage-seo/{id}', 'manageSeoStore');
         });
     });
+
+    // Blog
+    Route::controller('ManageBlogController')->prefix('blog')->name('blog.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::post('status/{id}', 'status')->name('status');
+
+        Route::get('categories', 'categories')->name('categories');
+        Route::post('category/store/{id?}', 'categoryStore')->name('category.store');
+        Route::post('category/status/{id}', 'categoryStatus')->name('category.status');
+    });
+
+    // Book
+    Route::controller('ManageBookController')->prefix('book')->name('book.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::post('status/{id}', 'status')->name('status');
+
+        Route::get('categories', 'categories')->name('categories');
+        Route::post('category/store/{id?}', 'categoryStore')->name('category.store');
+        Route::post('category/status/{id}', 'categoryStatus')->name('category.status');
+
+        Route::post('chapter/store/{bookId}/{id?}', 'chapterStore')->name('chapter.store');
+        Route::post('chapter/delete/{id}', 'chapterDelete')->name('chapter.delete');
+
+        Route::post('lesson/store/{chapterId}/{id?}', 'lessonStore')->name('lesson.store');
+        Route::post('lesson/delete/{id}', 'lessonDelete')->name('lesson.delete');
+    });
+
+    // Donation
+    Route::controller('ManageDonationController')->prefix('donation')->name('donation.')->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 });

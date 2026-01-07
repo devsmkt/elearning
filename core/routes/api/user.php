@@ -91,6 +91,12 @@ Route::namespace('User')->name('api.')->group(function () {
                     Route::post('manual/confirm', 'manualDepositConfirm');
                 });
 
+                // Donation
+                Route::controller('DonationController')->prefix('donation')->group(function () {
+                    Route::get('/', 'donations');
+                    Route::post('store', 'store');
+                });
+
 
                 Route::controller('TicketController')->prefix('ticket')->group(function () {
                     Route::get('/', 'supportTicket');

@@ -32,6 +32,10 @@ class Deposit extends Model
         return $this->belongsTo(CoursePurchased::class, 'course_purchased_id');
     }
 
+    public function donation(){
+        return $this->belongsTo(Donation::class, 'donation_id');
+    }
+
     public function methodName(){
         if ($this->method_code < 5000) {
             $methodName = @$this->gatewayCurrency()->name;

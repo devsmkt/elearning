@@ -88,6 +88,21 @@ class FileInfo
             'path'      => 'assets/images/category',
             'size'      => '520x360',
         ];
+        $data['blog'] = [
+            'path'      => 'assets/images/blog',
+            'size'      => '800x600',
+            'thumb'     => '400x300',
+        ];
+
+        $data['book'] = [
+            'path'      => 'assets/images/book',
+            'size'      => '600x800',
+            'thumb'     => '300x400',
+        ];
+
+        $data['lesson_pdf'] = [
+            'path'      => 'assets/files/lesson_pdf',
+        ];
 
         $data['video'] = [
             'path'      => 'assets/videos',

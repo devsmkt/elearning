@@ -226,6 +226,34 @@ class PaymentController extends Controller
                     'post_balance' => showAmount($instructor->balance)
                 ]);
             }
+
+            if ($deposit->donation) {
+                $user = User::find($deposit->user_id);
+                $user->balance -= $deposit->amount;
+                $user->save();
+
+                $donation = $deposit->donation;
+                $donation->payment_status = 1; // Success
+                $donation->save();
+
+                $transaction = new Transaction();
+                $transaction->user_id = $deposit->user_id;
+                $transaction->amount = $deposit->amount;
+                $transaction->post_balance = $user->balance;
+                $transaction->charge = $deposit->charge;
+                $transaction->trx_type = '-';
+                $transaction->details = 'Donation Payment Via ' . $methodName;
+                $transaction->trx = $deposit->trx;
+                $transaction->remark = 'donation';
+                $transaction->save();
+
+                // Notify Admin about Donation
+                $adminNotification = new AdminNotification();
+                $adminNotification->user_id = $user->id;
+                $adminNotification->title = 'New Donation from ' . $user->fullname;
+                $adminNotification->click_url = urlPath('admin.donation.index');
+                $adminNotification->save();
+            }
         }
     }
 

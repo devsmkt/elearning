@@ -177,6 +177,50 @@
          
         ]
     },
+    "blog": {
+        "title": "Manage Blog",
+        "icon": "las la-blog",
+        "menu_active": "admin.blog*",
+        "submenu": [
+            {
+                "keyword": ["Blog", "Blog list", "Blog Post"],
+                "title": "Blogs",
+                "route_name": "admin.blog.index",
+                "menu_active": "admin.blog.index"
+            },
+            {
+                "keyword": ["Blog Category", "Blog Categories"],
+                "title": "Categories",
+                "route_name": "admin.blog.categories",
+                "menu_active": "admin.blog.categories"
+            }
+        ]
+    },
+    "library": {
+        "title": "Manage Library",
+        "icon": "las la-book",
+        "menu_active": "admin.book*",
+        "submenu": [
+            {
+                "keyword": ["Book", "Book list", "Book Library"],
+                "title": "Books",
+                "route_name": "admin.book.index",
+                "menu_active": "admin.book.index"
+            },
+            {
+                "keyword": ["Book Category", "Book Categories"],
+                "title": "Categories",
+                "route_name": "admin.book.categories",
+                "menu_active": "admin.book.categories"
+            }
+        ]
+    },
+    "donations": {
+        "title": "Donations",
+        "icon": "las la-hand-holding-usd",
+        "menu_active": "admin.donation*",
+        "route_name": "admin.donation.index"
+    },
     "courses": {
         "title": "Courses",
         "icon": "la la-film",

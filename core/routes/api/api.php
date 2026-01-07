@@ -42,9 +42,23 @@ Route::controller('AppController')->group(function () {
     Route::get('instructor-profile/{username}', 'instructorProfile');
     Route::post('save-keyword', 'saveKeyword');
     Route::get('keyword', 'keyword');
-    Route::get('blogs', 'blogs');
     Route::get('latest-course', 'latestCourse');
     Route::get('verify-certificate/{secret}', 'verifyCertificate')->name('verify.certificate');
+});
+
+Route::controller('BlogController')->group(function () {
+    Route::get('blogs', 'blogs');
+    Route::get('blog/details/{id}', 'blogDetails');
+    Route::get('blog/category/{id}', 'categoryBlogs');
+});
+
+Route::controller('LibraryController')->group(function () {
+    Route::get('library/categories', 'categories');
+    Route::get('library/category/{id}', 'categoryBooks');
+    Route::get('library/books', 'books');
+    Route::get('library/book/{id}', 'bookDetails');
+    Route::get('library/chapter/{id}', 'chapterDetails');
+    Route::get('library/lesson/{id}', 'lessonDetails');
 });
 
 @include('user.php');
