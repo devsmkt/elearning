@@ -61,5 +61,9 @@ Route::controller('LibraryController')->group(function () {
     Route::get('library/lesson/{id}', 'lessonDetails');
 });
 
+Route::controller('FaqController')->group(function () {
+    Route::get('faqs', 'index');
+});
+
 @include('user.php');
 @include('instructor.php');

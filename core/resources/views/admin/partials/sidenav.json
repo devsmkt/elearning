@@ -215,6 +215,12 @@
             }
         ]
     },
+    "faq": {
+        "title": "Manage FAQ",
+        "icon": "las la-question-circle",
+        "menu_active": "admin.faq*",
+        "route_name": "admin.faq.index"
+    },
     "donations": {
         "title": "Donations",
         "icon": "las la-hand-holding-usd",

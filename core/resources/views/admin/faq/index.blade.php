@@ -8,36 +8,45 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Name')</th>
-                                    <th>@lang('Slug')</th>
+                                    <th>@lang('Question')</th>
+                                    <th>@lang('Image')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($categories as $category)
+                                @forelse($faqs as $faq)
                                     <tr>
-                                        <td>{{ __($category->name) }}</td>
-                                        <td>{{ $category->slug }}</td>
+                                        <td>{{ __($faq->question) }}</td>
+                                        <td>
+                                            @if($faq->image)
+                                                <img src="{{ getImage(getFilePath('faq') . '/' . $faq->image) }}" alt="@lang('image')" style="width: 50px;">
+                                            @else
+                                                @lang('No Image')
+                                            @endif
+                                        </td>
                                         <td>
                                             @php
-                                                echo $category->statusBadge;
+                                                echo $faq->statusBadge;
                                             @endphp
                                         </td>
                                         <td>
                                             <div class="button--group">
-                                                <button class="btn btn-sm btn-outline--primary cuModalBtn" data-resource="{{ $category }}" data-modal_title="@lang('Edit Category')" type="button">
+                                                <button class="btn btn-sm btn-outline--primary cuModalBtn" data-resource="{{ $faq }}" data-image="{{ $faq->image ? getImage(getFilePath('faq') . '/' . $faq->image) : '' }}" data-modal_title="@lang('Edit FAQ')" type="button">
                                                     <i class="la la-pencil"></i> @lang('Edit')
                                                 </button>
-                                                @if($category->status == 1)
-                                                    <button class="btn btn-sm btn-outline--danger confirmationBtn" data-question="@lang('Are you sure to disable this category?')" data-action="{{ route('admin.book.category.status', $category->id) }}">
+                                                @if($faq->status == 1)
+                                                    <button class="btn btn-sm btn-outline--danger confirmationBtn" data-question="@lang('Are you sure to disable this FAQ?')" data-action="{{ route('admin.faq.status', $faq->id) }}">
                                                         <i class="la la-eye-slash"></i> @lang('Disable')
                                                     </button>
                                                 @else
-                                                    <button class="btn btn-sm btn-outline--success confirmationBtn" data-question="@lang('Are you sure to enable this category?')" data-action="{{ route('admin.book.category.status', $category->id) }}">
+                                                    <button class="btn btn-sm btn-outline--success confirmationBtn" data-question="@lang('Are you sure to enable this FAQ?')" data-action="{{ route('admin.faq.status', $faq->id) }}">
                                                         <i class="la la-eye"></i> @lang('Enable')
                                                     </button>
                                                 @endif
+                                                <button class="btn btn-sm btn-outline--danger confirmationBtn" data-question="@lang('Are you sure to delete this FAQ?')" data-action="{{ route('admin.faq.delete', $faq->id) }}">
+                                                    <i class="la la-trash"></i> @lang('Delete')
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -50,9 +59,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($categories->hasPages())
+                @if ($faqs->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($categories) }}
+                        {{ paginateLinks($faqs) }}
                     </div>
                 @endif
             </div>
@@ -68,12 +77,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.book.category.store') }}" method="POST">
+                <form action="{{ route('admin.faq.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>@lang('Name')</label>
-                            <input type="text" name="name" class="form-control" required>
+                            <label>@lang('Question')</label>
+                            <input type="text" name="question" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Answer')</label>
+                            <textarea name="answer" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Image')</label>
+                            <input type="file" name="image" class="form-control" accept="image/*">
+                            <div class="mt-2" id="imagePreview"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -88,7 +106,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <button class="btn btn-sm btn-outline--primary cuModalBtn" data-modal_title="@lang('Add Category')">
+    <button class="btn btn-sm btn-outline--primary cuModalBtn" data-modal_title="@lang('Add FAQ')">
         <i class="las la-plus"></i> @lang('Add New')
     </button>
 @endpush
@@ -101,16 +119,21 @@
                 var modal = $('#cuModal');
                 var data = $(this).data();
                 modal.find('.modal-title').text(data.modal_title);
+                modal.find('#imagePreview').html('');
                 if (data.resource) {
-                    modal.find('input[name=name]').val(data.resource.name);
-                    modal.find('form').attr('action', `{{ route('admin.book.category.store') }}/${data.resource.id}`);
+                    modal.find('input[name=question]').val(data.resource.question);
+                    modal.find('textarea[name=answer]').val(data.resource.answer);
+                    if(data.image) {
+                        modal.find('#imagePreview').html(`<img src="${data.image}" style="width: 100px;">`);
+                    }
+                    modal.find('form').attr('action', `{{ route('admin.faq.store') }}/${data.resource.id}`);
                 } else {
-                    modal.find('input[name=name]').val('');
-                    modal.find('form').attr('action', `{{ route('admin.book.category.store') }}`);
+                    modal.find('input[name=question]').val('');
+                    modal.find('textarea[name=answer]').val('');
+                    modal.find('form').attr('action', `{{ route('admin.faq.store') }}`);
                 }
                 modal.modal('show');
             });
         })(jQuery);
     </script>
 @endpush
-

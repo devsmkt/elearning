@@ -11,20 +11,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>@lang('Image')</label>
-                                    <div class="image-upload">
-                                        <div class="thumb">
-                                            <div class="avatar-preview">
-                                                <div class="profilePicPreview" style="background-image: url({{ getImage('/', getFileSize('book')) }})">
-                                                    <button type="button" class="remove-image"><i class="fa fa-times"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="avatar-edit">
-                                                <input type="file" class="profilePicUpload" name="image" id="profilePicUpload1" accept=".png, .jpg, .jpeg" required>
-                                                <label for="profilePicUpload1" class="bg--primary">@lang('Upload Image')</label>
-                                                <small class="mt-2 text-facebook">@lang('Supported files'): <b>@lang('jpeg'), @lang('jpg'), @lang('png')</b>. @lang('Image will be resized into') {{ getFileSize('book') }} @lang('px') </small>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <x-image-uploader :imagePath="getImage(getFilePath('book'), getFileSize('book'))" :size="getFileSize('book')" class="w-100" id="uploadImage" :required="true" />
                                 </div>
                             </div>
                             <div class="col-md-8">

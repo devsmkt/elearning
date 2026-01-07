@@ -123,6 +123,11 @@ class FileInfo
             'path'      => 'assets/resources',
         ];
 
+        $data['faq'] = [
+            'path'      => 'assets/images/faq',
+            'size'      => '800x600', // Assuming a reasonable size
+        ];
+
         return $data;
     }
 }

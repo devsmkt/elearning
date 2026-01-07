@@ -135,6 +135,14 @@ Route::middleware('admin')->group(function () {
         Route::post('sub-categories-status/{id?}', 'subCategoriesStatus')->name('sub.categories.status');
     });
 
+    // FAQ
+    Route::controller('ManageFaqController')->prefix('faq')->name('faq.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store/{id?}', 'store')->name('store');
+        Route::post('status/{id}', 'status')->name('status');
+        Route::post('delete/{id}', 'delete')->name('delete');
+    });
+
 
     Route::controller('ManageGoalController')->prefix('goal')->name('goal.')->group(function () {
         Route::get('/', 'index')->name('index');
