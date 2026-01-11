@@ -191,6 +191,8 @@
     <style>
         .nicEdit-main {
             width: 100% !important;
+            height: 300px !important;
+            overflow-y: auto !important;
         }
         .nicEdit-panelContain {
             width: 100% !important;
