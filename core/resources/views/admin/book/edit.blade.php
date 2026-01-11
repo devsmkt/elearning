@@ -169,7 +169,7 @@
                         </div>
                         <div class="form-group">
                             <label>@lang('Content')</label>
-                            <textarea name="content" class="form-control" rows="5"></textarea>
+                            <textarea name="content" class="form-control nicEdit" rows="5" id="content"></textarea>
                         </div>
                         <div class="form-group">
                             <label>@lang('PDF File')</label>
