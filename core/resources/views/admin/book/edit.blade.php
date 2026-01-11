@@ -195,6 +195,9 @@
         .nicEdit-panelContain {
             width: 100% !important;
         }
+        div[style*="width: 100px"] {
+            width: 100% !important;
+        }
     </style>
 @endpush
 
