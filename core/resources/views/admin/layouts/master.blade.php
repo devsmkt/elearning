@@ -51,9 +51,9 @@
         });
     });
     (function($){
-        $( document ).on('mouseover ', '.nicEdit-main,.nicEdit-panelContain',function(){
-            $('.nicEdit-main').focus();
-        });
+        // $( document ).on('mouseover ', '.nicEdit-main,.nicEdit-panelContain',function(){
+        //     $('.nicEdit-main').focus();
+        // });
 
         $('.breadcrumb-nav-open').on('click', function() {
             $(this).toggleClass('active');
