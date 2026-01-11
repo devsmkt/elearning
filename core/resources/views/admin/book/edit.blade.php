@@ -187,6 +187,17 @@
     <x-confirmation-modal />
 @endsection
 
+@push('style')
+    <style>
+        .nicEdit-main {
+            width: 100% !important;
+        }
+        .nicEdit-panelContain {
+            width: 100% !important;
+        }
+    </style>
+@endpush
+
 @push('script')
     <script>
         (function($) {
