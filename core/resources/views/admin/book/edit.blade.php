@@ -213,6 +213,10 @@
             $('.addLessonBtn').on('click', function() {
                 var modal = $('#lessonModal');
                 var chapterId = $(this).data('chapter_id');
+                
+                // Auto-expand this chapter on reload
+                localStorage.setItem('activeChapter', 'collapse' + chapterId);
+                
                 modal.find('.modal-title').text('@lang("Add Lesson")');
                 modal.find('form').attr('action', '{{ route("admin.book.lesson.store", "") }}/' + chapterId);
                 modal.find('input[name=title]').val('');
