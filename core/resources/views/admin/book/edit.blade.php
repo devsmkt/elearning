@@ -192,7 +192,7 @@
         .nicEdit-main {
             width: 100% !important;
             height: 300px !important;
-            overflow-y: auto !important;
+            overflow-y: scroll !important;
         }
         .nicEdit-panelContain {
             width: 100% !important;
