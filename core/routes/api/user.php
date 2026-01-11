@@ -92,7 +92,7 @@ Route::namespace('User')->name('api.')->group(function () {
                 });
 
                 // Donation
-                Route::controller('DonationController')->prefix('donation')->group(function () {
+                Route::controller('\App\Http\Controllers\Api\DonationController')->prefix('donation')->group(function () {
                     Route::get('/', 'donations');
                     Route::post('store', 'store');
                 });

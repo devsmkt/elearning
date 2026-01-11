@@ -10,11 +10,16 @@ class Book extends Model
     use GlobalStatus;
 
     protected $guarded = ['id'];
-    protected $appends = ['file_url'];
+    protected $appends = ['file_url', 'image_url'];
 
     public function getFileUrlAttribute()
     {
         return $this->file ? asset(getFilePath('book_pdf') . '/' . $this->file) : null;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset(getFilePath('book') . '/' . $this->image) : null;
     }
 
     public function category()

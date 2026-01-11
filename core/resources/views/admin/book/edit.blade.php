@@ -218,6 +218,14 @@
                 modal.find('input[name=title]').val('');
                 modal.find('input[name=sort_order]').val('');
                 modal.find('textarea[name=content]').val('');
+                
+                // Clear nicEdit content
+                var textarea = modal.find('textarea[name=content]');
+                var editorId = textarea.attr('id');
+                if (editorId && nicEditors.findEditor(editorId)) {
+                    nicEditors.findEditor(editorId).setContent('');
+                }
+                
                 modal.modal('show');
             });
 
@@ -229,8 +237,33 @@
                 modal.find('input[name=title]').val(data.title);
                 modal.find('input[name=sort_order]').val(data.sort_order);
                 modal.find('textarea[name=content]').val(data.content);
+                
+                // Set nicEdit content
+                var textarea = modal.find('textarea[name=content]');
+                var editorId = textarea.attr('id');
+                if (editorId && nicEditors.findEditor(editorId)) {
+                    nicEditors.findEditor(editorId).setContent(data.content);
+                }
+                
                 modal.modal('show');
             });
+
+            // Keep accordion open after reload
+            $('.collapse').on('shown.bs.collapse', function () {
+                localStorage.setItem('activeChapter', $(this).attr('id'));
+            });
+
+            $('.collapse').on('hidden.bs.collapse', function () {
+                if (localStorage.getItem('activeChapter') == $(this).attr('id')) {
+                    localStorage.removeItem('activeChapter');
+                }
+            });
+
+            var activeChapter = localStorage.getItem('activeChapter');
+            if (activeChapter) {
+                $('#' + activeChapter).collapse('show');
+            }
+
         })(jQuery);
     </script>
 @endpush
