@@ -150,6 +150,22 @@ Route::middleware('admin')->group(function () {
         Route::post('status/{id?}', 'status')->name('status');
     });
 
+    // Footer Menu Manager
+    Route::controller('FooterMenuController')->name('footer.menu.')->prefix('footer-menu')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::post('delete/{id}', 'destroy')->name('delete');
+    });
+
+    // Menu Manager
+    Route::controller('MenuController')->name('menu.')->prefix('menu')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::post('delete/{id}', 'destroy')->name('delete');
+    });
+
 
 
 

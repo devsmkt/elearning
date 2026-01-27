@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller('AppController')->group(function () {
     Route::get('general-setting', 'generalSetting');
+    Route::get('menus', 'menus');
+    Route::get('footer-menus', 'footerMenus');
     Route::get('get-countries', 'getCountries');
     Route::get('language/{key?}', 'getLanguage');
     Route::get('policies', 'policies');

@@ -14,6 +14,7 @@ use App\Models\GatewayCurrency;
 use App\Models\GetCertificateUser;
 use App\Models\Instructor;
 use App\Models\Language;
+use App\Models\Menu;
 use App\Models\Page;
 use App\Models\SearchKeyword;
 use App\Models\SubCategory;
@@ -110,15 +111,12 @@ class AppController extends Controller
             $code = Language::where('is_default', Status::YES)->first()?->code ?? 'en';
         }
 
-        $jsonFile = file_get_contents(resource_path('lang/' . $code . '.json'));
-
+        $jsonFile = @file_get_contents(resource_path('lang/' . $code . '.json'));
 
         if (!$jsonFile) {
             $notify[] = 'Language file not found';
             return responseError('language_file_not_found', $notify);
         }
-
-
 
         $notify[] = 'Language';
 
@@ -127,6 +125,28 @@ class AppController extends Controller
             'file' => json_decode($jsonFile) ?? [],
             'code' => $code,
             'image_path' => getFilePath('language')
+        ]);
+    }
+
+    public function footerMenus()
+    {
+        $footerMenus = \App\Models\FooterMenu::where('status', 1)->orderBy('section_name')->orderBy('order')->get()->groupBy('section_name');
+        return response()->json([
+            'remark' => 'footer_menus',
+            'status' => 'success',
+            'message' => ['Footer menus retrieved successfully'],
+            'data' => [
+                'footer_menus' => $footerMenus,
+            ]
+        ]);
+    }
+
+    public function menus()
+    {
+        $menus = Menu::where('status', 1)->orderBy('order')->get();
+        $notify[] = 'Menu List';
+        return responseSuccess('menu_data', $notify, [
+            'menus' => $menus,
         ]);
     }
 

@@ -300,6 +300,20 @@
         "route_name": "admin.keywords",
         "menu_active": "admin.keywords"
     },
+    "menus": {
+        "keyword": ["Header Menu", "Frontend Menu", "Navigation"],
+        "title": "Header Menu",
+        "icon": "las la-bars",
+        "route_name": "admin.menu.index",
+        "menu_active": "admin.menu*"
+    },
+    "footer_menus": {
+        "keyword": ["Footer Menu", "Frontend Menu", "Navigation"],
+        "title": "Footer Menu",
+        "icon": "las la-stream",
+        "route_name": "admin.footer.menu.index",
+        "menu_active": "admin.footer.menu*"
+    },
     "payments": {
         "title": "Payments",
         "icon": "las la-file-invoice-dollar",
