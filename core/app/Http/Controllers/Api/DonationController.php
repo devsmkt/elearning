@@ -70,7 +70,7 @@ class DonationController extends Controller
 
         // Create Deposit
         $data = new Deposit();
-        $data->user_id = $user ? $user->id : 0; // Use 0 for guest if null is not allowed, hoping no strict FK
+        $data->user_id = $user ? $user->id : null; 
         $data->donation_id = $donation->id;
         $data->method_code = $gate->method_code;
         $data->method_currency = strtoupper($gate->currency);
