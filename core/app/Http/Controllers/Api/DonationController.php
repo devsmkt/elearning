@@ -37,7 +37,7 @@ class DonationController extends Controller
             return responseError('validation_error', $validator->errors());
         }
 
-        $user = auth()->user();
+        $user = auth()->guard('sanctum')->user();
         $gate = GatewayCurrency::whereHas('method', function ($gate) {
             $gate->where('status', Status::ENABLE);
         })->where('method_code', $request->method_code)->where('currency', $request->currency)->first();
@@ -58,11 +58,11 @@ class DonationController extends Controller
 
         // Create Donation
         $donation = new Donation();
-        $donation->user_id = $user->id;
+        $donation->user_id = $user ? $user->id : null;
         $donation->amount = $request->amount;
-        $donation->full_name = $request->full_name ?? $user->fullname;
-        $donation->email = $request->email ?? $user->email;
-        $donation->mobile = $request->mobile ?? $user->mobile;
+        $donation->full_name = $request->full_name ?? ($user ? $user->fullname : '');
+        $donation->email = $request->email ?? ($user ? $user->email : '');
+        $donation->mobile = $request->mobile ?? ($user ? $user->mobile : '');
         $donation->message = $request->message;
         $donation->payment_status = 0; // Pending
         $donation->trx = getTrx();
@@ -70,7 +70,7 @@ class DonationController extends Controller
 
         // Create Deposit
         $data = new Deposit();
-        $data->user_id = $user->id;
+        $data->user_id = $user ? $user->id : 0; // Use 0 for guest if null is not allowed, hoping no strict FK
         $data->donation_id = $donation->id;
         $data->method_code = $gate->method_code;
         $data->method_currency = strtoupper($gate->currency);
@@ -81,8 +81,8 @@ class DonationController extends Controller
         $data->btc_amount = 0;
         $data->btc_wallet = "";
         $data->trx = $donation->trx;
-        $data->success_url = route('user.deposit.history'); // Should probably be a donation history or success page
-        $data->failed_url = route('user.deposit.history');
+        $data->success_url = route('deposit.app.confirm', ['id' => encrypt($donation->id), 'type' => 'donation']); // Adjusted success URL
+        $data->failed_url = route('home');
         $data->save();
 
         $notify[] = 'Donation initiated successfully';

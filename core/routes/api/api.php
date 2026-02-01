@@ -48,6 +48,10 @@ Route::controller('AppController')->group(function () {
     Route::get('verify-certificate/{secret}', 'verifyCertificate')->name('verify.certificate');
 });
 
+Route::controller('App\Http\Controllers\Api\DonationController')->group(function () {
+    Route::post('donation/store', 'store');
+});
+
 Route::controller('BlogController')->group(function () {
     Route::get('blogs', 'blogs');
     Route::get('blog/details/{id}', 'blogDetails');
