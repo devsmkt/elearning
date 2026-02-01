@@ -81,11 +81,112 @@ class PaymentController extends Controller
             abort(404);
         }
         $data = Deposit::where('id', $id)->where('status', Status::PAYMENT_INITIATE)->orderBy('id', 'DESC')->firstOrFail();
-        $user = User::findOrFail($data->user_id);
-        auth()->login($user);
-        session()->put('Track', $data->trx);
-        return to_route('user.deposit.confirm');
+        
+        if ($data->user_id) {
+            $user = User::findOrFail($data->user_id);
+            auth()->login($user);
+            session()->put('Track', $data->trx);
+            return to_route('user.deposit.confirm');
+        } else {
+             // Guest Donation
+            session()->put('Track', $data->trx);
+            return to_route('donation.payment.confirm');
+        }
     }
+    
+    public function donationDepositConfirm()
+    {
+        $track = session()->get('Track');
+        $deposit = Deposit::where('trx', $track)->where('status', Status::PAYMENT_INITIATE)->orderBy('id', 'DESC')->with('gateway')->firstOrFail();
+
+        if ($deposit->method_code >= 1000) {
+            return to_route('donation.payment.manual.confirm');
+        }
+
+        $dirName = $deposit->gateway->alias;
+        $new = __NAMESPACE__ . '\\' . $dirName . '\\ProcessController';
+
+        $data = $new::process($deposit);
+        $data = json_decode($data);
+
+        if (isset($data->error)) {
+            $notify[] = ['error', $data->message];
+            return back()->withNotify($notify);
+        }
+        if (isset($data->redirect)) {
+            return redirect($data->redirect_url);
+        }
+
+        // for Stripe V3
+        if(@$data->session){
+            $deposit->btc_wallet = $data->session->id;
+            $deposit->save();
+        }
+
+        $pageTitle = 'Payment Confirm';
+        $view = 'Template::user.payment.' . $deposit->gateway->alias;
+        
+        // Ensure view exists or fallback
+        if (!view()->exists($view)) {
+             $view = 'Template::user.payment.default'; // Fallback if specific gateway view is missing
+             if (!view()->exists($view)) {
+                 // Return simple view if default also missing
+                 return view('admin.payment.default_confirm', compact('data', 'pageTitle', 'deposit'));
+             }
+        }
+        
+        return view($view, compact('data', 'pageTitle', 'deposit'));
+    }
+
+    public function donationManualDepositConfirm()
+    {
+        $track = session()->get('Track');
+        $data = Deposit::where('trx', $track)->where('status', Status::PAYMENT_INITIATE)->with('gateway')->orderBy('id', 'DESC')->firstOrFail();
+        if ($data->method_code > 999) {
+            $pageTitle = 'Deposit Confirm';
+            $method = $data->gatewayCurrency();
+            $gateway = $method->method;
+            return view('Template::user.payment.manual', compact('data', 'pageTitle', 'method', 'gateway'));
+        }
+        abort(404);
+    }
+
+    public function donationManualDepositUpdate(Request $request)
+    {
+        $track = session()->get('Track');
+        $data = Deposit::where('trx', $track)->where('status', Status::PAYMENT_INITIATE)->orderBy('id', 'DESC')->with('gateway')->firstOrFail();
+        $gatewayCurrency = $data->gatewayCurrency();
+        $gateway = $gatewayCurrency->method;
+        $formData = $gateway->form->form_data;
+
+        $formProcessor = new FormProcessor();
+        $validationRule = $formProcessor->valueValidation($formData);
+        $request->validate($validationRule);
+        $userData = $formProcessor->processFormData($request, $formData);
+
+
+        $data->detail = $userData;
+        $data->status = Status::PAYMENT_PENDING;
+        $data->save();
+
+        if ($data->donation_id) {
+             $donation = \App\Models\Donation::find($data->donation_id);
+             if($donation){
+                $donation->payment_status = 2; // Pending
+                $donation->save();
+             }
+        }
+
+        $adminNotification = new AdminNotification();
+        $adminNotification->user_id = $data->user_id ?? 0;
+        $adminNotification->title = 'Donation request from ' . ($data->user ? $data->user->username : 'Guest');
+        $adminNotification->click_url = urlPath('admin.deposit.details', $data->id);
+        $adminNotification->save();
+
+        $notify[] = ['success', 'You have donation request has been taken'];
+        return to_route('home')->withNotify($notify);
+    }
+
 
 
     public function depositConfirm()
